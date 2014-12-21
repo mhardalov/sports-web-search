@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +32,6 @@
 </head>
 
 <body>
-
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -50,7 +48,7 @@
             </div>
             <!-- Top Menu Items -->
             <form class="navbar-form navbar-right" ng-submit="submit()" ng-controller="SolrController">
-	            <input type="text" placeholder="Search..." class="form-control" name="query">
+	            <input type="text" placeholder="Search..." class="form-control" ng-model="query" name="query">
 	        </form>
             <ul class="nav navbar-right top-nav">
                 <li class="dropdown">
@@ -500,13 +498,13 @@
 	    .controller('SolrController', ['$scope', function($scope) {
 	      $scope.submit = function() {
 	        if ($scope.query) {
-	          var url = 'http://localhost:8983/solr/nutch/';
-	 
-	          $http.get(url, params: { 
-	        	  	q: $scope.query,
+	 		  var url = '${solr.url}';
+	 		  
+	          $http.get(url, { params: { 
+		          	q: $scope.query,
 	        	  	wt: 'json',
 	        	  	indent: 'true'
-	        	  	}).
+	        	  }}).
 				success(function(data, status, headers, config) {
 			       // this callback will be called asynchronously
 				   // when the response is available
