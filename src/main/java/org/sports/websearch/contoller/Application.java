@@ -1,4 +1,4 @@
-package org.sports.crawler.contoller;
+package org.sports.websearch.contoller;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.SpringApplication;

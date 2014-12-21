@@ -505,9 +505,21 @@
 		        	  	indent: 'true'
 		        	  };
 	          
-	          $.get(url, data, function(data) {
-	        	alert('done');  
+	          $.ajax({
+	              url: url,
+	              type: "GET",
+	              crossDomain: true,
+	              data: JSON.stringify(data),
+	              dataType: "json",
+	              success: function (response) {
+	                  var resp = JSON.parse(response)
+	                  alert(resp.status);
+	              },
+	              error: function (xhr, status) {
+	                  alert("error");
+	              }
 	          });
+
 	          /*$http.get(url, { params: data}).
 				success(function(data, status, headers, config) {
 			       // this callback will be called asynchronously
