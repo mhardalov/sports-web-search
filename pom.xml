@@ -33,7 +33,7 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		
-		<solr.url>http://localhost:8983/solr/nutch/</solr.url>
+		<solr.url>http://localhost:8983/solr/nutch</solr.url>
 	</properties>
 
 	<dependencies>

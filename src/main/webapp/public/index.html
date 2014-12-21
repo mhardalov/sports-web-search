@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin - Bootstrap Admin Template</title>
+    <title>Sports Web Search</title>
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/${bootstrap.version}/css/bootstrap.min.css" />	
@@ -31,7 +31,7 @@
 
 </head>
 
-<body>
+<body ng-app="sportsWebSearch">
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -494,24 +494,30 @@
     <script src="js/plugins/morris/morris-data.js"></script>
 
 	<script>
-		angular.module('submitExample', [])
+		angular.module('sportsWebSearch', [])
 	    .controller('SolrController', ['$scope', function($scope) {
 	      $scope.submit = function() {
 	        if ($scope.query) {
-	 		  var url = '${solr.url}';
-	 		  
-	          $http.get(url, { params: { 
-		          	q: $scope.query,
-	        	  	wt: 'json',
-	        	  	indent: 'true'
-	        	  }}).
+	          var url = '${solr.url}';
+	          var data = { 
+			          	q: $scope.query,
+		        	  	wt: 'json',
+		        	  	indent: 'true'
+		        	  };
+	          
+	          $.get(url, data, function(data) {
+	        	alert('done');  
+	          });
+	          /*$http.get(url, { params: data}).
 				success(function(data, status, headers, config) {
 			       // this callback will be called asynchronously
 				   // when the response is available
 				   
 				   alert(data);
 				 })
-	          $scope.query = '';
+	          $scope.query = '';*/
+	          
+	          
 	        }
 	      };
 	    }]);
