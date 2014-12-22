@@ -249,25 +249,8 @@
     <script src="js/plugins/morris/raphael.min.js"></script>
     <script src="js/plugins/morris/morris.min.js"></script>
     <script src="js/plugins/morris/morris-data.js"></script>
-
-	<script>
-		angular.module('sportsWebSearch', [])
-	    .controller('SolrController', ['$scope', '$http', function($scope, $http) {
-	      $scope.submit = function() {
-	        if ($scope.query) {
-	          var url = '${solr.url}';
-	          var data = {query: $scope.query};
-	          
-	          $http.get('/solr/search', { params: data}).
-		          success(function(data) {
-		              $scope.greeting = data;
-		          });
-	          
-	          $scope.query = '';
-	        }
-	      };
-	    }]);
-	</script>
+	<script src="../controllers/solr.js"></script>
+	
 </body>
 
 </html>
