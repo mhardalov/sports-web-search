@@ -1,8 +1,5 @@
 package org.sports.websearch.contoller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 import org.sports.websearch.model.Article;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
