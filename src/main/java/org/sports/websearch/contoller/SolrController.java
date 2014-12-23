@@ -1,5 +1,8 @@
 package org.sports.websearch.contoller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
@@ -8,9 +11,11 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.SolrParams;
 import org.sports.websearch.model.Article;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,25 +52,33 @@ public class SolrController {
 	}
 
 	@RequestMapping(value = "/{query}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Article> search(
+	public @ResponseBody ResponseEntity<List<Article>> search(
 			@RequestParam(value = "query", required = true) String query) {
 
+		List<Article> result = new ArrayList<Article>();
 		SolrServer server = this.getSolrServer();
 		SolrQuery solrQuery = new SolrQuery();
-		solrQuery.setQuery( query );
-//		solrQuery.addSort(new SortClause("tstamp", ORDER.desc));
-		
+		solrQuery.setQuery(query);
+		// solrQuery.addSort(new SortClause("tstamp", ORDER.desc));
+
 		QueryResponse rsp = null;
 		try {
-			rsp = server.query( solrQuery );
+			rsp = server.query(solrQuery);
 		} catch (SolrServerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		SolrDocumentList docs = rsp.getResults();
-		
+		for (SolrDocument doc : docs) {
+			String url = doc.getFieldValue("url").toString();
+			String title = doc.getFieldValue("title").toString();
+			String content = doc.getFieldValue("content").toString();
+			Article entry = new Article(url, title, content, "");
+			result.add(entry);
+		}
+
 		System.out.println(query);
-		return null;
+		return new ResponseEntity<List<Article>>(result, HttpStatus.OK);
 	}
 
 }

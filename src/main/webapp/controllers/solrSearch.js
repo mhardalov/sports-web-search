@@ -1,17 +1,18 @@
 var app = angular.module('sportsWebSearch', []);
 
-app.controller('SolrController', [ '$scope', '$http', function($scope, $http) {
+app.controller('SolrSearchController', [ '$scope', '$http', function($scope, $http) {
+	$scope.articles = [{ url: 'sdfsdf' }];
+	
 	$scope.submit = function() {
 		if ($scope.query) {
-			var url = '${solr.url}';
-			var data = {
+			var params = {
 				query : $scope.query
 			};
 
 			$http.get('/solr/search', {
-				params : data
+				params : params
 			}).success(function(data) {
-				$scope.greeting = data;
+				$scope.articles = data;
 			});
 
 			$scope.query = '';

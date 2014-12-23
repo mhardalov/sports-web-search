@@ -1,0 +1,41 @@
+<div>
+	<!-- Page Heading -->
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">
+				Dashboard <small>Statistics Overview</small>
+			</h1>
+			<ol class="breadcrumb">
+				<li class="active"><i class="fa fa-dashboard"></i> Dashboard</li>
+			</ol>
+		</div>
+	</div>
+	<!-- /.row -->
+
+	<div class="row">
+		<form role="form" ng-submit="submit()">
+			<div class="form-group">
+				<label for="inputSuccess" class="control-label">Input with
+					success</label> <input type="text" placeholder="Search..."
+					class="form-control" ng-model="query" name="query">
+			</div>
+			<button class="btn btn-default" type="submit">Submit Button</button>
+		</form>
+	</div>
+
+	<div class="row">
+		art len: {{articles.length}}
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<i class="fa fa-clock-o fa-fw"></i> Results Panel
+				</h3>
+			</div>
+			<div class="panel-body">
+				<div ng-repeat="item in articles">
+					<span>{{item.url}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

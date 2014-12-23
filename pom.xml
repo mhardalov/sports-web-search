@@ -29,6 +29,7 @@
 		<highcharts.version>3.0.10</highcharts.version>
 		<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
 		<angular-file-upload.version>1.2.5</angular-file-upload.version>
+		<angular-ui-router.version>0.2.13</angular-ui-router.version>
 		<solr-solrj.version>4.10.2</solr-solrj.version>
 
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -82,6 +83,11 @@
 			<groupId>org.webjars</groupId>
 			<artifactId>angular-file-upload</artifactId>
 			<version>${angular-file-upload.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>angular-ui-router</artifactId>
+			<version>${angular-ui-router.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.solr</groupId>
