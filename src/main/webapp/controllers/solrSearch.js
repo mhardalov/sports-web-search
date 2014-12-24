@@ -1,12 +1,12 @@
 var app = angular.module('sportsWebSearch', []);
 
-app.controller('SolrSearchController', [ '$scope', '$http', function($scope, $http) {
-	$scope.articles = [{ url: 'sdfsdf' }];
+app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', function($scope, $http, $state) {            	
+	$scope.articles = [];
 	
 	$scope.submit = function() {
 		if ($scope.query) {
 			var params = {
-				query : $scope.query
+				query : encodeURIComponent($scope.query)
 			};
 
 			$http.get('/solr/search', {
@@ -17,5 +17,5 @@ app.controller('SolrSearchController', [ '$scope', '$http', function($scope, $ht
 
 			$scope.query = '';
 		}
-	};
+	};            	
 } ]);
