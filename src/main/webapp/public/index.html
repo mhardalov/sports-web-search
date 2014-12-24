@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" ng-app="sportsWebSearch">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,10 +27,33 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <!-- jQuery -->
+    <script type="text/javascript" src="/webjars/jquery/${jquery.version}/jquery.min.js"></script>
+    
+    <!-- Bootstrap Core JavaScript -->
+	<script type="text/javascript" src="/webjars/bootstrap/${bootstrap.version}/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-file-upload/${angular-file-upload.version}/angular-file-upload-shim.min.js"></script>
+	
+	<!-- AngularJS -->
+	<script type="text/javascript" src="/webjars/angularjs/${angularjs.version}/angular.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-ui-router/${angular-ui-router.version}/angular-ui-router.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-file-upload/${angular-file-upload.version}/angular-file-upload.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/${angular-ui-bootstrap.version}/ui-bootstrap.min.js"></script>
+	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/${angular-ui-bootstrap.version}/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- AngularJS files -->
+	<script src="/app.js"></script>
+	<script src="../controllers/solrSearch.js"></script>
+    
+    <!-- Morris Charts JavaScript -->
+    <script src="/js/plugins/morris/raphael.min.js"></script>
+    <script src="/js/plugins/morris/morris.min.js"></script>
+    <script src="/js/plugins/morris/morris-data.js"></script>
+	    
 
 </head>
-
-<body ng-app="sportsWebSearch">
+<body>
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -44,7 +66,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-    			<a ui-sref="dashboard" class="navbar-brand"><i class="fa fa-fw fa-dashboard"></i> Sports Web</a>                
+    			<a ui-sref-active="current" ui-sref="dashboard" class="navbar-brand">Sports Web</a>                
             </div>
             <!-- Top Menu Items -->
             <form class="navbar-form navbar-right" ng-submit="submit()" ng-controller="SolrSearchController">
@@ -204,30 +226,7 @@
         <!-- /#page-wrapper -->
 
     </div>
-    <!-- /#wrapper -->
-
-    <!-- jQuery -->
-    <script type="text/javascript" src="/webjars/jquery/${jquery.version}/jquery.min.js"></script>
-    
-    <!-- Bootstrap Core JavaScript -->
-	<script type="text/javascript" src="/webjars/bootstrap/${bootstrap.version}/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/webjars/angular-file-upload/${angular-file-upload.version}/angular-file-upload-html5-shim.min.js"></script>
-	
-	<!-- AngularJS -->
-	<script type="text/javascript" src="/webjars/angularjs/${angularjs.version}/angular.min.js"></script>
-	<script type="text/javascript" src="/webjars/angularjs/${angularjs.version}/angular-route.min.js"></script>
-	<script type="text/javascript" src="/webjars/angular-ui-router/${angular-ui-router.version}/angular-ui-router.min.js"></script>
-	<script type="text/javascript" src="/webjars/angular-file-upload/${angular-file-upload.version}/angular-file-upload.min.js"></script>
-	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/${angular-ui-bootstrap.version}/ui-bootstrap.min.js"></script>
-	<script type="text/javascript" src="/webjars/angular-ui-bootstrap/${angular-ui-bootstrap.version}/ui-bootstrap-tpls.min.js"></script>
-
-    <!-- Morris Charts JavaScript -->
-    <script src="/js/plugins/morris/raphael.min.js"></script>
-    <script src="/js/plugins/morris/morris.min.js"></script>
-    <script src="/js/plugins/morris/morris-data.js"></script>
-	<script src="/app.js"></script>
-	<script src="../controllers/solrSearch.js"></script>
-	
+    <!-- /#wrapper -->	
 </body>
 
 </html>
