@@ -25,10 +25,10 @@
 		<junit.version>4.11</junit.version>
 		<bootstrap.version>3.1.1</bootstrap.version>
 		<jquery.version>1.11.0</jquery.version>
-		<angularjs.version>1.2.12</angularjs.version>
 		<highcharts.version>3.0.10</highcharts.version>
-		<angular-ui-bootstrap.version>0.10.0</angular-ui-bootstrap.version>
-		<angular-file-upload.version>1.2.5</angular-file-upload.version>
+		<angularjs.version>1.3.8</angularjs.version>		
+		<angular-ui-bootstrap.version>0.12.0</angular-ui-bootstrap.version>
+		<angular-file-upload.version>2.0.5</angular-file-upload.version>
 		<angular-ui-router.version>0.2.13</angular-ui-router.version>
 		<solr-solrj.version>4.10.2</solr-solrj.version>
 
