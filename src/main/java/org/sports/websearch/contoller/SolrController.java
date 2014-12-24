@@ -1,6 +1,8 @@
 package org.sports.websearch.contoller;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
@@ -50,7 +52,7 @@ public class SolrController {
 		SolrServer server = this.getSolrServer();
 		SolrQuery solrQuery = new SolrQuery();
 		solrQuery.setQuery(query);
-		//solrQuery.addSort(new SortClause("tstamp", ORDER.desc));
+		solrQuery.addSort(new SortClause("url", ORDER.asc));
 
 		QueryResponse rsp = null;
 		try {
