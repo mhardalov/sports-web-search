@@ -21,7 +21,7 @@ public class Article {
 	public Article(String url, String title, String content, String category) {
 		this.setContent(content);
 		this.setTitle(title);
-		this.setUrl(content);
+		this.setUrl(url);
 		this.setCategory(category);
 	}
 
