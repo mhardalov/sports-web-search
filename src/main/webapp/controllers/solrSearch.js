@@ -12,7 +12,7 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', function($scope,
 			$http.get('/solr/search', {
 				params : params
 			}).success(function(data) {
-				$scope.articles = data;
+				$scope.articles = data.articles;
 			});
 
 			$scope.query = '';
