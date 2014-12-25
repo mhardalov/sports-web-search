@@ -1,10 +1,7 @@
 package org.sports.websearch.model;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import org.apache.solr.common.SolrDocument;
 import org.sports.websearch.utils.ISO8601DateParser;
