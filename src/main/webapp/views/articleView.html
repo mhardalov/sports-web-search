@@ -1,10 +1,10 @@
-<div>
-	<h2><a href="{{article.url}}">{{article.title}}</a></h2>
-	<div>
-		<span>Date</span>:
-		<span><i>{{item.publishDate}}</i></span>
-	</div>
-	<div id="news-content">
+<div class="blog-post">
+	<h2 class="blog-post-title">{{article.title}}</h2>
+	<p class="blog-post-meta">
+		{{article.publishDate}} from <a href="{{article.url}}">{{article.url}}</a>
+	</p>
+
+	<p>
 		{{article.content}}
-	</div>
+	</p>
 </div>
