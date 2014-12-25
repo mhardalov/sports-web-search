@@ -14,6 +14,7 @@ public class ArticlesResult {
 
 	private long resultCount;
 
+	private double elapsedTime;
 	
 	/**
 	 * Get content truncated to certain length proper for visualization 
@@ -40,6 +41,8 @@ public class ArticlesResult {
 
 	public ArticlesResult(QueryResponse rsp) {
 		SolrDocumentList docs = rsp.getResults();
+		this.elapsedTime = rsp.getElapsedTime() * 0.001;
+		
 		this.resultCount = docs.getNumFound();
 		for (SolrDocument doc : docs) {
 			String url = doc.getFieldValue("url").toString();
@@ -51,5 +54,9 @@ public class ArticlesResult {
 
 			this.articles.add(entry);
 		}
+	}
+
+	public double getElapsedTime() {
+		return elapsedTime;
 	}
 }

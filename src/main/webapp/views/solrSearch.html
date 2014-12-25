@@ -13,8 +13,10 @@
 		<form role="form" ng-submit="submit()">
 			<div class="form-group">
 				<input type="text" placeholder="Search..." class="form-control" ng-model="query" name="query">
+			</div>			
+			<div class="form-group">
+				<button class="btn btn-default" type="submit">Search</button>
 			</div>
-			<button class="btn btn-default" type="submit">Search</button>
 		</form>
 	</div>
 
@@ -26,7 +28,7 @@
 				</h3>
 			</div>
 			<div class="panel-body">
-				<span> About <i ng-bind="resultCount"></i> results found</span><br>
+				<span> About <i ng-bind="resultCount"></i> results found for <i ng-bind="elapsedTime"></i> seconds</span><br>
 				<br>
 				
 				<div ng-repeat="item in articles">
@@ -34,6 +36,10 @@
 					<span><a href="{{item.url}}">{{item.url}}</a></span>
 					<div>{{item.content}}</div>
 				</div>
+				
+				<div data-pagination="" data-num-pages="numPages()" 
+				  data-current-page="currentPage" data-max-size="maxSize"  
+				  data-boundary-links="true"></div>
 			</div>
 		</div>
 	</div>
