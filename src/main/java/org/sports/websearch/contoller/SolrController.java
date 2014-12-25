@@ -71,17 +71,32 @@ public class SolrController {
 		solrQuery.set("start", Math.abs(Math.max(page, 1) - 1) * rowsPerPage);
 		solrQuery.setSort("score", ORDER.desc);
 
+		QueryResponse rsp = doQuery(server, solrQuery);
+
+		ArticlesResult result = new ArticlesResult(rsp);
+		if (result.getResultCount() < 200) {
+			solrQuery.clear();
+			solrQuery.setQuery(queryStr);
+			solrQuery.set("qt", "spell");
+			solrQuery.set("spellcheck", "true");
+			solrQuery.set("spellcheck.build", "true");
+			solrQuery.set("spellcheck.extendedResults", "true");
+			
+			rsp = doQuery(server, solrQuery);
+		}
+		
+		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
+	}
+
+	private QueryResponse doQuery(SolrServer server, SolrQuery solrQuery) {
 		QueryResponse rsp = null;
 		try {
 			rsp = server.query(solrQuery);
 		} catch (SolrServerException e) {
 			e.printStackTrace();
-			return new ResponseEntity<ArticlesResult>(
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			return null;
 		}
-
-		ArticlesResult result = new ArticlesResult(rsp);
-		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
+		return rsp;
 	}
 
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
@@ -97,17 +112,10 @@ public class SolrController {
 		solrQuery.setParam("mtl", "true");
 		solrQuery.setParam("mtl.fl", "content_idx");
 		solrQuery.setParam("mlt.mindf", "1");
-		solrQuery.setParam("mtl.qf", "contet_idx^100.00");
+		solrQuery.setParam("mtl.qf", "content_idx");
 		solrQuery.set("fl", "content,title,url,score");
 
-		QueryResponse rsp = null;
-		try {
-			rsp = server.query(solrQuery);
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-			return new ResponseEntity<ScoreResult>(
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		QueryResponse rsp = this.doQuery(server, solrQuery);
 
 		ScoreResult result = new ScoreResult(rsp);
 		return new ResponseEntity<ScoreResult>(result, HttpStatus.OK);
