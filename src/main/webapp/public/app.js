@@ -16,9 +16,10 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
         	templateUrl: '/views/categoryFinder.html',
         	controller: 'CategoryFinderCtrl'
         })
-        .state('about', {
-            // we'll get to this in a bit       
-        });
-        
+        .state('article', {
+        	url: 'article/:url',
+        	templateUrl: '/views/articleView.html',
+        	controller: 'ArticleViewCtrl'
+        });	        
 });
 

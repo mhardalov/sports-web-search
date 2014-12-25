@@ -1,28 +1,53 @@
 package org.sports.websearch.model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.apache.solr.common.SolrDocument;
+import org.sports.websearch.utils.ISO8601DateParser;
 
 public class Article {
 
 	private String url;
-	
+
 	private String title;
-	
+
 	private String content;
-	
+
 	private String category;
-	
-	public Article() {
-		this.setContent("");
-		this.setTitle("");
-		this.setUrl("");
-		this.setCategory("");
-	}
-	
-	public Article(String url, String title, String content, String category) {
+
+	private Date publishDate;
+
+	public Article(SolrDocument doc) {
+		String url = doc.getFieldValue("url").toString();
+		String title = doc.getFieldValue("title").toString();
+		String content = doc.getFieldValue("content").toString();
+		String category = "";
+		Date date = null;
+		
+		try {			
+			date = ISO8601DateParser.parse(doc.getFieldValue("tstamp").toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
 		this.setContent(content);
 		this.setTitle(title);
 		this.setUrl(url);
 		this.setCategory(category);
+		this.setPublishDate(date);
+	}
+
+	public Article(String url, String title, String content, String category,
+			Date publishDate) {
+		this.setContent(content);
+		this.setTitle(title);
+		this.setUrl(url);
+		this.setCategory(category);
+		this.setPublishDate(publishDate);
 	}
 
 	public String getUrl() {
@@ -55,5 +80,13 @@ public class Article {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+
+	public Date getPublishDate() {
+		return publishDate;
+	}
+
+	public void setPublishDate(Date publishDate) {
+		this.publishDate = publishDate;
 	}
 }

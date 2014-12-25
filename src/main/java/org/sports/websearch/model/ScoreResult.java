@@ -29,14 +29,8 @@ public class ScoreResult {
 	public ScoreResult(QueryResponse rsp) {
 			SolrDocumentList docs = rsp.getResults();
 			this.maxScore = docs.getMaxScore();
-			for (SolrDocument doc : docs) {
-				String url = doc.getFieldValue("url").toString();
-				String title = doc.getFieldValue("title").toString();
-				String content = doc.getFieldValue("content").toString();
-				String category = "";
-				double score = Double.parseDouble(doc.getFieldValue("score").toString());
-				
-				ArticleScore entry = new ArticleScore(url, title, content, category, score);
+			for (SolrDocument doc : docs) {				
+				ArticleScore entry = new ArticleScore(doc);
 	
 				this.articles.add(entry);
 			}

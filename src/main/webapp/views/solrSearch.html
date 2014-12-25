@@ -32,8 +32,12 @@
 				<br>
 				
 				<div ng-repeat="item in articles">
-					<h3 ng->{{item.title}}</h3>
-					<span><a href="{{item.url}}">{{item.url}}</a></span>
+					<h3>
+						<a ui-sref-active="current" ui-sref="article({url:'{{item.url}}'})">{{item.title}}</a>
+					</h3>
+					<span>
+						<a href="{{item.url}}">{{item.url}}</a>
+					</span>
 					<div>{{item.content}}</div>
 				</div>
 				

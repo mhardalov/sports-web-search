@@ -1,6 +1,7 @@
 package org.sports.websearch.contoller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
@@ -11,6 +12,9 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.sports.websearch.model.Article;
 import org.sports.websearch.model.ArticlesResult;
 import org.sports.websearch.model.CategoryQuery;
 import org.sports.websearch.model.ScoreResult;
@@ -26,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/solr")
 public class SolrController {
-	
+
 	final int rowsPerPage = 10;
 	final String urlSolr = "http://localhost:8983/solr/nutch";
 
@@ -52,42 +56,7 @@ public class SolrController {
 
 		return server;
 	}
-
-	@RequestMapping(value = "/{query}", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ArticlesResult> search(
-			@RequestParam(value = "query", required = true) String query,
-			@RequestParam(value = "page", required = false, defaultValue="1") int page)
-			throws UnsupportedEncodingException {
-
-		SolrServer server = this.getSolrServer();
-		SolrQuery solrQuery = new SolrQuery();
 	
-		String queryStr = URLDecoder.decode(query, "UTF-8");
-
-		solrQuery.setQuery("text:\"" + queryStr + "\"");
-		solrQuery.set("fl", "content,title,url,tstamp,score");
-		
-		//Avoiding paging with invalid values < 1
-		solrQuery.set("start", Math.abs(Math.max(page, 1) - 1) * rowsPerPage);
-		solrQuery.setSort("score", ORDER.desc);
-
-		QueryResponse rsp = doQuery(server, solrQuery);
-
-		ArticlesResult result = new ArticlesResult(rsp);
-		if (result.getResultCount() < 200) {
-			solrQuery.clear();
-			solrQuery.setQuery(queryStr);
-			solrQuery.set("qt", "spell");
-			solrQuery.set("spellcheck", "true");
-			solrQuery.set("spellcheck.build", "true");
-			solrQuery.set("spellcheck.extendedResults", "true");
-			
-			rsp = doQuery(server, solrQuery);
-		}
-		
-		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
-	}
-
 	private QueryResponse doQuery(SolrServer server, SolrQuery solrQuery) {
 		QueryResponse rsp = null;
 		try {
@@ -99,13 +68,49 @@ public class SolrController {
 		return rsp;
 	}
 
-	@RequestMapping(value = "/category", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity<ScoreResult> category(
-			@RequestBody CategoryQuery query) throws UnsupportedEncodingException {
+	@RequestMapping(value = "/search", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<ArticlesResult> search(
+			@RequestParam(value = "query", required = true) String query,
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page)
+			throws UnsupportedEncodingException {
 
 		SolrServer server = this.getSolrServer();
 		SolrQuery solrQuery = new SolrQuery();
-		
+
+		String queryStr = URLDecoder.decode(query, "UTF-8");
+
+		solrQuery.setQuery("text:\"" + queryStr + "\"");
+		solrQuery.set("fl", "content,title,url,tstamp,score");
+
+		// Avoiding paging with invalid values < 1
+		solrQuery.set("start", Math.abs(Math.max(page, 1) - 1) * rowsPerPage);
+		solrQuery.setSort("score", ORDER.desc);
+
+		QueryResponse rsp = doQuery(server, solrQuery);
+
+		ArticlesResult result = new ArticlesResult(rsp);
+		if (result.getResultCount() == 200) {
+			solrQuery.clear();
+			solrQuery.setQuery(queryStr);
+			solrQuery.set("qt", "spell");
+			solrQuery.set("spellcheck", "true");
+			solrQuery.set("spellcheck.build", "true");
+			solrQuery.set("spellcheck.extendedResults", "true");
+
+			rsp = doQuery(server, solrQuery);
+		}
+
+		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/category", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<ScoreResult> getCategory(
+			@RequestBody CategoryQuery query)
+			throws UnsupportedEncodingException {
+
+		SolrServer server = this.getSolrServer();
+		SolrQuery solrQuery = new SolrQuery();
+
 		String queryStr = URLDecoder.decode(query.getContent(), "UTF-8");
 
 		solrQuery.setQuery("\"" + queryStr + "\"");
@@ -121,4 +126,29 @@ public class SolrController {
 		return new ResponseEntity<ScoreResult>(result, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/article", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<Article> getArticle(
+			@RequestParam(value = "url", required = true) String url) throws UnsupportedEncodingException {
+		
+		SolrServer server = this.getSolrServer();
+		SolrQuery solrQuery = new SolrQuery();
+
+		String queryStr = URLDecoder.decode(url.toString(), "UTF-8");
+
+		solrQuery.setQuery("url:\"" + queryStr + "\"");
+		solrQuery.set("fl", "content,title,url,tstamp,score");
+
+		QueryResponse rsp = doQuery(server, solrQuery);
+		rsp.getResults();
+		SolrDocumentList docs = rsp.getResults();
+		
+		Article result = null;
+		if (docs != null && docs.getNumFound() > 0) {
+			result = new Article(docs.get(0));
+		} else {
+			return new ResponseEntity<Article>(HttpStatus.NOT_FOUND);
+		}	
+		
+		return new ResponseEntity<Article>(result, HttpStatus.OK);
+	}
 }

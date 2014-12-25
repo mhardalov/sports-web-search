@@ -45,12 +45,8 @@ public class ArticlesResult {
 		
 		this.resultCount = docs.getNumFound();
 		for (SolrDocument doc : docs) {
-			String url = doc.getFieldValue("url").toString();
-			String title = doc.getFieldValue("title").toString();
-			String content = this.getContent(doc.getFieldValue("content").toString(), maxLength);
-			String category = "";
-			
-			Article entry = new Article(url, title, content, category);
+			Article entry = new Article(doc);
+			entry.setContent(this.getContent(entry.getContent(), maxLength));
 
 			this.articles.add(entry);
 		}
