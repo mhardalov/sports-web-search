@@ -103,8 +103,8 @@ public class SolrController {
 		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/category", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ScoreResult> getCategory(
+	@RequestMapping(value = "/category", method = RequestMethod.POST)
+	public @ResponseBody ResponseEntity<ScoreResult> category(
 			@RequestBody CategoryQuery query)
 			throws UnsupportedEncodingException {
 

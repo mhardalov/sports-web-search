@@ -8,7 +8,7 @@ app.controller('CategoryFinderCtrl', [ '$scope', '$http', '$state', function($sc
 		if ($scope.content) {
 			var query = {content:$scope.content};
 
-			$http.get('/solr/category', {
+			$http.post('/solr/category', {
 				content : encodeURIComponent($scope.content)
 			}).success(function(data) {
 				$scope.articles = data.articles;
