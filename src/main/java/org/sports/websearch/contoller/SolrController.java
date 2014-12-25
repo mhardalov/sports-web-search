@@ -26,10 +26,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/solr")
 public class SolrController {
+	
+	final int rowsPerPage = 10;
+	final String urlSolr = "http://localhost:8983/solr/nutch";
 
 	private SolrServer getSolrServer() {
-		String url = "http://localhost:8983/solr/nutch";
-		HttpSolrServer server = new HttpSolrServer(url);
+		HttpSolrServer server = new HttpSolrServer(urlSolr);
 		server.setMaxRetries(1); // defaults to 0. > 1 not recommended.
 		server.setConnectionTimeout(5000); // 5 seconds to establish TCP
 		// Setting the XML response parser is only required for cross
@@ -53,7 +55,8 @@ public class SolrController {
 
 	@RequestMapping(value = "/{query}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<ArticlesResult> search(
-			@RequestParam(value = "query", required = true) String query)
+			@RequestParam(value = "query", required = true) String query,
+			@RequestParam(value = "page", required = false, defaultValue="1") int page)
 			throws UnsupportedEncodingException {
 
 		SolrServer server = this.getSolrServer();
@@ -63,6 +66,9 @@ public class SolrController {
 
 		solrQuery.setQuery("text:\"" + queryStr + "\"");
 		solrQuery.set("fl", "content,title,url,tstamp,score");
+		
+		//Avoiding paging with invalid values < 1
+		solrQuery.set("start", Math.abs(Math.max(page, 1) - 1) * rowsPerPage);
 		solrQuery.setSort("score", ORDER.desc);
 
 		QueryResponse rsp = null;

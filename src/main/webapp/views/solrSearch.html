@@ -37,9 +37,9 @@
 					<div>{{item.content}}</div>
 				</div>
 				
-				<div data-pagination="" data-num-pages="numPages()" 
-				  data-current-page="currentPage" data-max-size="maxSize"  
-				  data-boundary-links="true"></div>
+				<pagination total-items="resultCount" ng-model="currentPage" ng-change="pageChanged()" 
+					max-size="maxSize" class="pagination-sm" 
+					rotate="false" num-pages="numPages"></pagination>
 			</div>
 		</div>
 	</div>
