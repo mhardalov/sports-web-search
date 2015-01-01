@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SolrController {
 
 	final int rowsPerPage = 10;
-	final String urlSolr = "http://localhost:8983/solr/nutch";
+	final String urlSolr = "http://localhost:8983/solr/sports";
 
 	private SolrServer getSolrServer() {
 		HttpSolrServer server = new HttpSolrServer(urlSolr);
@@ -100,6 +100,7 @@ public class SolrController {
 		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
 	}
 
+	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<ScoreResult> category(
 			@RequestBody CategoryQuery query)
@@ -110,12 +111,18 @@ public class SolrController {
 
 		String queryStr = URLDecoder.decode(query.getContent(), "UTF-8");
 
-		solrQuery.setQuery("\"" + queryStr + "\"");
+		//Escape : solr things it's field query
+		queryStr = queryStr.replace(":", "\\:");		
+		solrQuery.setQuery(queryStr);
+		solrQuery.setQueryType("mlt");
 		solrQuery.setParam("mtl", "true");
+		solrQuery.setParam("mtl.boost", "true");
+		solrQuery.setParam("mlt.maxqt","10");
+		solrQuery.setParam("mlt.mindf","0");
 		solrQuery.setParam("mtl.fl", "content_idx");
-		solrQuery.setParam("mlt.mindf", "1");
-		solrQuery.setParam("mtl.qf", "content_idx");
-		solrQuery.set("fl", "content,title,url,score");
+		solrQuery.setParam("fl", "content,title,url,score,category,tstamp");
+		solrQuery.setParam("df", "content_idx");
+		
 
 		QueryResponse rsp = this.doQuery(server, solrQuery);
 

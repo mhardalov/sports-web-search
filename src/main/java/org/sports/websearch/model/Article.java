@@ -1,10 +1,11 @@
 package org.sports.websearch.model;
 
-import java.text.ParseException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.solr.common.SolrDocument;
-import org.sports.websearch.utils.ISO8601DateParser;
 
 public class Article {
 
@@ -22,12 +23,16 @@ public class Article {
 		String url = doc.getFieldValue("url").toString();
 		String title = doc.getFieldValue("title").toString();
 		String content = doc.getFieldValue("content").toString();
-		String category = "";
+		String category = doc.getFieldValue("category").toString();
 		Date date = null;
 		
 		try {			
-			date = ISO8601DateParser.parse(doc.getFieldValue("tstamp").toString());
-		} catch (ParseException e) {
+			TimeZone tz = TimeZone.getTimeZone("UTC");
+		    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		    df.setTimeZone(tz);
+		    String dateAsISO = doc.getFieldValue("tstamp").toString();
+		    date = df.parse(dateAsISO);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
