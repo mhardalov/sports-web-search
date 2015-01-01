@@ -8,11 +8,10 @@
 	<version>0.1.0</version>
 
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.1.10.RELEASE</version>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-parent</artifactId>
+	    <version>1.2.0.RELEASE</version>
 	</parent>
-
 
 	<properties>
 		<start-class>org.sports.websearch.Application</start-class>
@@ -21,7 +20,7 @@
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
 		<build-date>${maven.build.timestamp}</build-date>
 
-		<java.version>1.6</java.version>
+		<java.version>1.7</java.version>
 		<junit.version>4.11</junit.version>
 		<bootstrap.version>3.1.1</bootstrap.version>
 		<jquery.version>1.11.0</jquery.version>
@@ -42,6 +41,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.solr</groupId>
+					<artifactId>solr-solrj</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
@@ -92,7 +97,6 @@
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
-			<version>${solr-solrj.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -137,9 +141,6 @@
 								<DependencyConvergence />
 							</rules>
 						</configuration>
-						<goals>
-							<goal>enforce</goal>
-						</goals>
 						<phase>validate</phase>
 					</execution>
 				</executions>
@@ -183,4 +184,13 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.solr</groupId>
+				<artifactId>solr-solrj</artifactId>
+				<version>${solr-solrj.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
