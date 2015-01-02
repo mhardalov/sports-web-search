@@ -1,7 +1,9 @@
 package org.sports.websearch.model;
 
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -17,7 +19,7 @@ public class Article {
 
 	private String category;
 
-	private Date publishDate;
+	private String publishDate;
 
 	public Article(SolrDocument doc) {
 		String url = doc.getFieldValue("url").toString();
@@ -25,13 +27,13 @@ public class Article {
 		String content = doc.getFieldValue("content").toString();
 		String category = doc.getFieldValue("category").toString();
 		Date date = null;
-		
-		try {			
+
+		try {
 			TimeZone tz = TimeZone.getTimeZone("UTC");
-		    DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		    df.setTimeZone(tz);
-		    String dateAsISO = doc.getFieldValue("tstamp").toString();
-		    date = df.parse(dateAsISO);
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+			df.setTimeZone(tz);
+			String dateAsISO = doc.getFieldValue("tstamp").toString();
+			date = df.parse(dateAsISO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,11 +86,13 @@ public class Article {
 		this.category = category;
 	}
 
-	public Date getPublishDate() {
+	public String getPublishDate() {
 		return publishDate;
 	}
 
 	public void setPublishDate(Date publishDate) {
-		this.publishDate = publishDate;
+
+		Format formatter = new SimpleDateFormat("dd.MM.YYYY HH:mm");
+		this.publishDate = formatter.format(publishDate);
 	}
 }

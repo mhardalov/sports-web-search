@@ -77,7 +77,7 @@ public class SolrController {
 		String queryStr = URLDecoder.decode(query, "UTF-8");
 
 		solrQuery.setQuery("text:\"" + queryStr + "\"");
-		solrQuery.set("fl", "content,title,url,tstamp,score");
+		solrQuery.set("fl", "category,content,title,url,tstamp,score");
 
 		// Avoiding paging with invalid values < 1
 		solrQuery.set("start", Math.abs(Math.max(page, 1) - 1) * rowsPerPage);
@@ -140,7 +140,7 @@ public class SolrController {
 		String queryStr = URLDecoder.decode(url.toString(), "UTF-8");
 
 		solrQuery.setQuery("url:\"" + queryStr + "\"");
-		solrQuery.set("fl", "content,title,url,tstamp,score");
+		solrQuery.set("fl", "category,content,title,url,tstamp,score");
 
 		QueryResponse rsp = doQuery(server, solrQuery);
 		rsp.getResults();
