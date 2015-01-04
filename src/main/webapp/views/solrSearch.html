@@ -1,66 +1,64 @@
-<div>
-	<!-- Page Heading -->
+
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header"
+	style="background-image: url('img/home-bg.jpg')">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+				<div class="site-heading">
+					<h1>Sports Search</h1>
+					<hr class="small">
+					<span class="subheading"><i><q>Der Mensch ist nur da ganz Mensch, wo er spielt</q></i> <br> Friedrich Schiller</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-lg-12 list-inline text-center">
 			<h1 class="page-header">
-				Dashboard <small>Statistics Overview</small>
+				Search <small>Sports Articles</small>
 			</h1>
+			<form role="form" ng-submit="submit()">
+				<div class="form-group">
+					<input type="text" placeholder="Search..." class="form-control"
+						ng-model="query" name="query">
+				</div>
+				<div class="form-group">
+					<button class="btn btn-default" type="submit">Search</button>
+				</div>
+			</form>
+		</div>
+		<span ng-if="elapsedTime"> 
+			About <i ng-bind="resultCount"></i> results found for <i ng-bind="elapsedTime"></i> seconds
+		</span>
+		<hr>
+	</div>
+    <div class="row" ng-if="articles.length">
+       	<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" ng-repeat="item in articles">
+       		<span>
+				<div class="post-preview">
+					<a ui-sref-active="current" ui-sref="article({url:'{{item.url}}'})"> 
+						<h2 class="post-title">
+							{{item.title}}
+						</h2>
+						<h3 class="post-subtitle">
+							{{item.content}}
+						</h3>
+					</a>
+					<p class="post-meta">Posted by <a href="{{item.url}}" style="color: #006621">{{item.url}}</a> on {{item.publishDate}}</p>
+				</div>
+				<hr>
+       		</span>
+       	</div>
+		<div class="navigation">
+			<pagination total-items="resultCount" ng-model="currentPage"
+				ng-change="pageChanged()" max-size="maxSize"
+				class="pagination-sm" rotate="false" num-pages="numPages"></pagination>
 		</div>
 	</div>
-	<!-- /.row -->
-
-	<div class="row">
-		<form role="form" ng-submit="submit()">
-			<div class="form-group">
-				<input type="text" placeholder="Search..." class="form-control"
-					ng-model="query" name="query">
-			</div>
-			<div class="form-group">
-				<button class="btn btn-default" type="submit">Search</button>
-			</div>
-		</form>
-	</div>
-
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					<i class="fa fa-clock-o fa-fw"></i> Results Panel
-				</h3>
-			</div>
-			<div class="panel-body">
-				<span> About <i ng-bind="resultCount"></i> results found for
-					<i ng-bind="elapsedTime"></i> seconds
-				</span>
-				<br>
-				
-				<div class="col-sm-9" ng-repeat="item in articles">
-					<div class="row">
-						<div class="col-xs-12">
-							<h2><a ui-sref-active="current"
-									ui-sref="article({url:'{{item.url}}'})"> {{item.title}}</a>
-							</h2>
-							<p>{{item.content}}</p>
-							<div class="text-center">
-								<a href="{{item.url}}">
-									<span class="glyphicon glyphicon-plus"></span> Original story
-								</a>
-							</div>
-						</div>
-					</div>
-					<hr/>
-				</div>
-				<br>
-				
-				<div class="navigation">				
-					<pagination total-items="resultCount" ng-model="currentPage"
-						ng-change="pageChanged()" max-size="maxSize" class="pagination-sm"
-						rotate="false" num-pages="numPages"></pagination>
-				</div>
-			</div>
-
-
-		</div>
-	</div>
-</div>
 </div>

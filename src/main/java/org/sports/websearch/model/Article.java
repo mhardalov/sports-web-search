@@ -3,7 +3,6 @@ package org.sports.websearch.model;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -20,6 +19,8 @@ public class Article {
 	private String category;
 
 	private String publishDate;
+	
+	private String cssCategory;
 
 	public Article(SolrDocument doc) {
 		String url = doc.getFieldValue("url").toString();
@@ -43,6 +44,7 @@ public class Article {
 		this.setUrl(url);
 		this.setCategory(category);
 		this.setPublishDate(date);
+		this.setCssCategory("article-default");
 	}
 
 	public Article(String url, String title, String content, String category,
@@ -52,6 +54,7 @@ public class Article {
 		this.setUrl(url);
 		this.setCategory(category);
 		this.setPublishDate(publishDate);
+		this.setCssCategory("article-default");
 	}
 
 	public String getUrl() {
@@ -94,5 +97,13 @@ public class Article {
 
 		Format formatter = new SimpleDateFormat("dd.MM.YYYY HH:mm");
 		this.publishDate = formatter.format(publishDate);
+	}
+
+	public String getCssCategory() {
+		return this.cssCategory;
+	}
+
+	public void setCssCategory(String cssCategory) {
+		this.cssCategory = cssCategory;
 	}
 }

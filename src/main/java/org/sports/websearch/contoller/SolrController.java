@@ -1,7 +1,8 @@
 package org.sports.websearch.contoller;
 
- import java.io.UnsupportedEncodingException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -53,106 +54,117 @@ public class SolrController {
 
 		return server;
 	}
-	
-	private QueryResponse doQuery(SolrServer server, SolrQuery solrQuery) {
-		QueryResponse rsp = null;
-		try {
-			rsp = server.query(solrQuery);
-		} catch (SolrServerException e) {
-			e.printStackTrace();
-			return null;
-		}
+
+	private QueryResponse doQuery(SolrServer server, SolrQuery solrQuery)
+			throws SolrServerException {
+		QueryResponse rsp;
+		rsp = server.query(solrQuery);
+
 		return rsp;
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<ArticlesResult> search(
 			@RequestParam(value = "query", required = true) String query,
-			@RequestParam(value = "page", required = false, defaultValue = "1") int page)
-			throws UnsupportedEncodingException {
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
+		try {
+			SolrServer server = this.getSolrServer();
+			SolrQuery solrQuery = new SolrQuery();
 
-		SolrServer server = this.getSolrServer();
-		SolrQuery solrQuery = new SolrQuery();
+			String queryStr = URLDecoder.decode(query, "UTF-8");
 
-		String queryStr = URLDecoder.decode(query, "UTF-8");
+			solrQuery.setQuery("text:\"" + queryStr + "\"");
+			solrQuery.set("fl", "category,content,title,url,tstamp,score");
 
-		solrQuery.setQuery("text:\"" + queryStr + "\"");
-		solrQuery.set("fl", "category,content,title,url,tstamp,score");
+			// Avoiding paging with invalid values < 1
+			solrQuery.set("start", Math.abs(Math.max(page, 1) - 1)
+					* rowsPerPage);
+			solrQuery.setSort("score", ORDER.desc);
 
-		// Avoiding paging with invalid values < 1
-		solrQuery.set("start", Math.abs(Math.max(page, 1) - 1) * rowsPerPage);
-		solrQuery.setSort("score", ORDER.desc);
+			QueryResponse rsp = this.doQuery(server, solrQuery);
 
-		QueryResponse rsp = doQuery(server, solrQuery);
+			ArticlesResult result = new ArticlesResult(rsp);
+			if (result.getResultCount() == 200) {
+				solrQuery.clear();
+				solrQuery.setQuery(queryStr);
+				solrQuery.set("qt", "spell");
+				solrQuery.set("spellcheck", "true");
+				solrQuery.set("spellcheck.build", "true");
+				solrQuery.set("spellcheck.extendedResults", "true");
 
-		ArticlesResult result = new ArticlesResult(rsp);
-		if (result.getResultCount() == 200) {
-			solrQuery.clear();
-			solrQuery.setQuery(queryStr);
-			solrQuery.set("qt", "spell");
-			solrQuery.set("spellcheck", "true");
-			solrQuery.set("spellcheck.build", "true");
-			solrQuery.set("spellcheck.extendedResults", "true");
+				rsp = this.doQuery(server, solrQuery);
+			}
 
-			rsp = doQuery(server, solrQuery);
+			return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<ArticlesResult>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
 	}
 
 	@SuppressWarnings("deprecation")
 	@RequestMapping(value = "/category", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity<ScoreResult> category(
-			@RequestBody CategoryQuery query)
-			throws UnsupportedEncodingException {
+			@RequestBody CategoryQuery query) {
+		try {
+			SolrServer server = this.getSolrServer();
+			SolrQuery solrQuery = new SolrQuery();
 
-		SolrServer server = this.getSolrServer();
-		SolrQuery solrQuery = new SolrQuery();
+			//String queryStr = URLDecoder.decode(query.getContent(), "UTF-8");
 
-		String queryStr = URLDecoder.decode(query.getContent(), "UTF-8");
+			// Escape : solr things it's field query
+			//queryStr = queryStr.replace(":", "\\:");
+			solrQuery.setQuery(query.getContent());
+			solrQuery.setQueryType("mlt");
+			solrQuery.setParam("mtl", "true");
+			solrQuery.setParam("mtl.boost", "true");
+			solrQuery.setParam("mlt.maxqt", "10");
+			solrQuery.setParam("mlt.mindf", "0");
+			solrQuery.setParam("mtl.fl", "content_idx");
+			solrQuery.setParam("fl", "content,title,url,score,category,tstamp");
+			solrQuery.setParam("df", "content_idx");
 
-		//Escape : solr things it's field query
-		queryStr = queryStr.replace(":", "\\:");		
-		solrQuery.setQuery(queryStr);
-		solrQuery.setQueryType("mlt");
-		solrQuery.setParam("mtl", "true");
-		solrQuery.setParam("mtl.boost", "true");
-		solrQuery.setParam("mlt.maxqt","10");
-		solrQuery.setParam("mlt.mindf","0");
-		solrQuery.setParam("mtl.fl", "content_idx");
-		solrQuery.setParam("fl", "content,title,url,score,category,tstamp");
-		solrQuery.setParam("df", "content_idx");
-		
+			QueryResponse rsp = this.doQuery(server, solrQuery);
+			ScoreResult result = new ScoreResult(rsp);
 
-		QueryResponse rsp = this.doQuery(server, solrQuery);
+			return new ResponseEntity<ScoreResult>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<ScoreResult>((ScoreResult)null,
+					HttpStatus.INTERNAL_SERVER_ERROR);
 
-		ScoreResult result = new ScoreResult(rsp);
-		return new ResponseEntity<ScoreResult>(result, HttpStatus.OK);
+		}
 	}
 
 	@RequestMapping(value = "/article", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Article> getArticle(
-			@RequestParam(value = "url", required = true) String url) throws UnsupportedEncodingException {
-		
-		SolrServer server = this.getSolrServer();
-		SolrQuery solrQuery = new SolrQuery();
+			@RequestParam(value = "url", required = true) String url) {
+		try {
+			SolrServer server = this.getSolrServer();
+			SolrQuery solrQuery = new SolrQuery();
 
-		String queryStr = URLDecoder.decode(url.toString(), "UTF-8");
+			String queryStr = URLDecoder.decode(url.toString(), "UTF-8");
 
-		solrQuery.setQuery("url:\"" + queryStr + "\"");
-		solrQuery.set("fl", "category,content,title,url,tstamp,score");
+			solrQuery.setQuery("url:\"" + queryStr + "\"");
+			solrQuery.set("fl", "category,content,title,url,tstamp,score");
 
-		QueryResponse rsp = doQuery(server, solrQuery);
-		rsp.getResults();
-		SolrDocumentList docs = rsp.getResults();
-		
-		Article result = null;
-		if (docs != null && docs.getNumFound() > 0) {
-			result = new Article(docs.get(0));
-		} else {
-			return new ResponseEntity<Article>(HttpStatus.NOT_FOUND);
-		}	
-		
-		return new ResponseEntity<Article>(result, HttpStatus.OK);
+			QueryResponse rsp = this.doQuery(server, solrQuery);
+			rsp.getResults();
+			SolrDocumentList docs = rsp.getResults();
+
+			Article result = null;
+			if (docs != null && docs.getNumFound() > 0) {
+				result = new Article(docs.get(0));
+			} else {
+				return new ResponseEntity<Article>(HttpStatus.NOT_FOUND);
+			}
+
+			return new ResponseEntity<Article>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Article>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
 	}
 }
