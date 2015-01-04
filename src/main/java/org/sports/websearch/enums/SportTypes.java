@@ -4,6 +4,7 @@ public enum SportTypes {
 	FOOTBALL("футбол", "article-football"),
 	BGFOOTBALL("бг футбол", "article-football"),
 	BASKETBALL("баскетбол", "article-basketball"),
+	NBA("нба", "article-basketball"),
 	BASEBALL("бейзбол", "article-baseball"),
 	FORMULA("формула 1", "article-cars"),
 	MOTOR("моторни спортове", "article-cars"),
