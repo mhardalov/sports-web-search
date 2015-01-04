@@ -1,6 +1,6 @@
 var app = angular.module('sportsWebSearch');
 
-app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', function($scope, $http, $state) {            	
+app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', 'anchorSmoothScroll', function($scope, $http, $state, anchorSmoothScroll) {            	
 	$scope.articles = [];
 	$scope.resultCount = 0;
 	$scope.elapsedTime = 0;
@@ -31,25 +31,7 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', function($scope,
 				$scope.elapsedTime = data.elapsedTime;
 			});
 		}
+		
+		anchorSmoothScroll.scrollTo("container");
 	};            	
 } ]);
-
-app.directive('focusMe', function($timeout, $parse) {
-  return {
-    link: function(scope, element, attrs) {
-      var model = $parse(attrs.focusMe);
-      scope.$watch(model, function(value) {
-        console.log('value=',value);
-        if(value === true) { 
-          $timeout(function() {
-            element[0].focus(); 
-          });
-        }
-      });
-      element.bind('blur', function() {
-        console.log('blur')
-        scope.$apply(model.assign(scope, false));
-      })
-    }
-  };
-});
