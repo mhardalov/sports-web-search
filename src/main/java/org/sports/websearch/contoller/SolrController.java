@@ -111,11 +111,11 @@ public class SolrController {
 			SolrServer server = this.getSolrServer();
 			SolrQuery solrQuery = new SolrQuery();
 
-			//String queryStr = URLDecoder.decode(query.getContent(), "UTF-8");
+			String queryStr = URLDecoder.decode(query.getContent(), "UTF-8");
 
 			// Escape : solr things it's field query
-			//queryStr = queryStr.replace(":", "\\:");
-			solrQuery.setQuery(query.getContent());
+			queryStr = queryStr.replace(":", "\\:");
+			solrQuery.setQuery(queryStr);
 			solrQuery.setQueryType("mlt");
 			solrQuery.setParam("mtl", "true");
 			solrQuery.setParam("mtl.boost", "true");
