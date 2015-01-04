@@ -6,6 +6,7 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', function($scope,
 	$scope.elapsedTime = 0;
     $scope.currentPage = 1;
     $scope.maxSize = 10;
+    $scope.shouldBeOpen = true;
     
     $scope.setPage = function (pageNo) {
       $scope.currentPage = pageNo;
@@ -32,3 +33,23 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', function($scope,
 		}
 	};            	
 } ]);
+
+app.directive('focusMe', function($timeout, $parse) {
+  return {
+    link: function(scope, element, attrs) {
+      var model = $parse(attrs.focusMe);
+      scope.$watch(model, function(value) {
+        console.log('value=',value);
+        if(value === true) { 
+          $timeout(function() {
+            element[0].focus(); 
+          });
+        }
+      });
+      element.bind('blur', function() {
+        console.log('blur')
+        scope.$apply(model.assign(scope, false));
+      })
+    }
+  };
+});
