@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.solr.common.SolrDocument;
+import org.sports.websearch.utils.CategoryCssHelper;
 
 public class Article {
 
@@ -44,7 +45,7 @@ public class Article {
 		this.setUrl(url);
 		this.setCategory(category);
 		this.setPublishDate(date);
-		this.setCssCategory("article-default");
+		this.setCssCategory(CategoryCssHelper.getCssClass(category));
 	}
 
 	public Article(String url, String title, String content, String category,
@@ -54,7 +55,7 @@ public class Article {
 		this.setUrl(url);
 		this.setCategory(category);
 		this.setPublishDate(publishDate);
-		this.setCssCategory("article-default");
+		this.setCssCategory(CategoryCssHelper.getCssClass(category));
 	}
 
 	public String getUrl() {

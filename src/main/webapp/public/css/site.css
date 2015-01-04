@@ -1,3 +1,35 @@
 .article-default {
 	background-image: url('/img/article-default.jpg');
 }
+
+.article-football {
+	background-image: url('/img/article-football.jpg');
+}
+
+.article-basketball {
+	background-image: url('/img/article-basketball.jpg');
+}
+
+.article-golf {
+	background-image: url('/img/article-golf.jpg');
+}
+
+.article-volleyball {
+	background-image: url('/img/article-volleyball.jpg');
+}
+
+.article-americalfootball {
+	background-image: url('/img/article-americalfootball.jpg');
+}
+
+.article-cars {
+	background-image: url('/img/article-cars.jpg');
+}
+
+.article-fromtheshelf {
+	background-image: url('/img/article-fromtheshelf.jpg');
+}
+
+.article-snooker {
+	background-image: url('/img/article-snooker.jpg');
+}
