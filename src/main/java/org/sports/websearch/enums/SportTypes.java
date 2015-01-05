@@ -3,6 +3,10 @@ package org.sports.websearch.enums;
 public enum SportTypes {
 	FOOTBALL("футбол", "article-football"),
 	BGFOOTBALL("бг футбол", "article-football"),
+	WORLDFOOTBALL("световен футбол", "article-football"),
+	MONDIAL("мондиал", "article-football"),
+	EURO("евро", "article-football"),
+	CHAMPIONSLEAGUE("шампионска лига", "article-football"),
 	BASKETBALL("баскетбол", "article-basketball"),
 	NBA("нба", "article-basketball"),
 	BASEBALL("бейзбол", "article-baseball"),
@@ -26,7 +30,7 @@ public enum SportTypes {
 	
 	public static SportTypes findByText(String text){
 	    for(SportTypes v : values()){
-	        if( v.getText().equals(text)){
+	        if( v.getText().contains(text) || text.contains(v.getText())) {
 	            return v;
 	        }
 	    }

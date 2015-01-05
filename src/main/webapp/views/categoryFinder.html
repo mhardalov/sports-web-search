@@ -1,40 +1,49 @@
-<div>
-	<!-- Page Heading -->
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header"
+	style="background-image: url('img/categorize-bg.jpg')">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+				<div class="site-heading">
+					<h1>Categorize</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<!-- Main Content -->
+<div class="container" id="container">
 	<div class="row">
-		<div class="col-lg-12">
+		<div class="col-lg-12 list-inline text-center">
 			<h1 class="page-header">
-				Category <small>Statistics Overview</small>
+				Find <small>Article Category</small>
 			</h1>
+
+			<form role="form" ng-submit="submit()">
+				<div class="form-group">
+					<textarea class="form-control" rows="10" placeholder="Search..." class="form-control" ng-model="content" name="content" focus-me="shouldBeOpen"></textarea>
+				</div>
+				<button class="btn btn-default" type="submit">Search</button>
+			</form>
+			<span> Max score <i ng-bind="resultCount"></i></span><br>
 		</div>
 	</div>
-	<!-- /.row -->
-
-	<div class="row">
-		<form role="form" ng-submit="submit()">
-			<div class="form-group">
-				<textarea class="form-control" rows="10" placeholder="Search..." class="form-control" ng-model="content" name="content"></textarea>
-			</div>
-			<button class="btn btn-default" type="submit">Search</button>
-		</form>
-	</div>
-
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					<i class="fa fa-clock-o fa-fw"></i> Results Panel
-				</h3>
-			</div>
-			<div class="panel-body">
-				<span> Max score <i ng-bind="resultCount"></i></span><br>
-				<br>
-				<ul class="list-group">
-				  <li class="list-group-item" ng-repeat="item in articles">
-				    <span class="badge">{{item.score}}</span>
-				    <div><a href="{{item.url}}">{{item.title}}</a></div>				    
-				  </li>
-				</ul>
-			</div>
-		</div>
-	</div>
+	
+	<div class="row" ng-if="articles.length">
+       	<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1" ng-repeat="item in articles">
+       		<span>
+				<div class="post-preview">
+					<a ui-sref-active="current" ui-sref="article({url:'{{item.url}}'})"> 
+						<h2 class="post-title">
+							{{item.title}}
+						</h2>
+					</a>
+					<span class="badge">{{item.score}}</span>
+				</div>
+				<hr>
+       		</span>
+       	</div>
+    </div>
 </div>

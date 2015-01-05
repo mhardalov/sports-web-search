@@ -15,5 +15,7 @@ app.controller('CategoryFinderCtrl', [ '$scope', '$http', '$state', function($sc
 				$scope.resultCount = data.maxScore;
 			});
 		}
+		
+		anchorSmoothScroll.scrollTo("container");
 	};            	
 } ]);
