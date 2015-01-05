@@ -9,11 +9,16 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse;
+import org.apache.solr.client.solrj.response.SpellCheckResponse.Suggestion;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.sports.websearch.model.Article;
 import org.sports.websearch.model.ArticlesResult;
 import org.sports.websearch.model.CategoryQuery;
 import org.sports.websearch.model.ScoreResult;
+import org.sports.websearch.model.SearchQueryResult;
+import org.sports.websearch.model.SpellSuggestion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -62,7 +67,7 @@ public class SolrController {
 	}
 
 	@RequestMapping(value = "/search", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<ArticlesResult> search(
+	public @ResponseBody ResponseEntity<SearchQueryResult> search(
 			@RequestParam(value = "query", required = true) String query,
 			@RequestParam(value = "page", required = false, defaultValue = "1") int page) {
 		try {
@@ -78,25 +83,23 @@ public class SolrController {
 			solrQuery.set("start", Math.abs(Math.max(page, 1) - 1)
 					* rowsPerPage);
 			solrQuery.setSort("score", ORDER.desc);
-
 			QueryResponse rsp = this.doQuery(server, solrQuery);
 
-			ArticlesResult result = new ArticlesResult(rsp);
-			if (result.getResultCount() == 200) {
-				solrQuery.clear();
-				solrQuery.setQuery(queryStr);
-				solrQuery.set("qt", "spell");
-				solrQuery.set("spellcheck", "true");
-				solrQuery.set("spellcheck.build", "true");
-				solrQuery.set("spellcheck.extendedResults", "true");
+			ArticlesResult articles = new ArticlesResult(rsp);
 
-				rsp = this.doQuery(server, solrQuery);
-			}
+			ModifiableSolrParams params = new ModifiableSolrParams();
+			params.set("qt", "/spell");
+			params.set("q", queryStr);
+			params.set("spellcheck", "on");
+			// params.set("spellcheck.build", "true");
+			QueryResponse response = server.query(params);
+			SpellSuggestion sc = new SpellSuggestion(response);
 
-			return new ResponseEntity<ArticlesResult>(result, HttpStatus.OK);
+			SearchQueryResult result = new SearchQueryResult(sc, articles);
+			return new ResponseEntity<SearchQueryResult>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<ArticlesResult>(
+			return new ResponseEntity<SearchQueryResult>(
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -129,7 +132,7 @@ public class SolrController {
 			return new ResponseEntity<ScoreResult>(result, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<ScoreResult>((ScoreResult)null,
+			return new ResponseEntity<ScoreResult>((ScoreResult) null,
 					HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}

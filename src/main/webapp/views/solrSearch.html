@@ -33,9 +33,20 @@
 				</div>
 			</form>
 		</div>
-		<span ng-if="elapsedTime"> 
-			About <i ng-bind="resultCount"></i> results found for <i ng-bind="elapsedTime"></i> seconds
+		<span ng-if="elapsedTime" class="queryStats"> 
+			Found <i ng-bind="resultCount"></i> results found for <i ng-bind="elapsedTime"></i> seconds
 		</span>
+		<br>
+		
+		<span class="spell" ng-if="querySuggestion.length">
+			Did you mean 
+				<a href="#{{querySuggestion}}" ng-click="currectQuery()">
+					<b>
+						<i>{{querySuggestion}}</i>
+					</b>
+				</a>
+		</span>
+		
 		<hr>
 	</div>
     <div class="row" ng-if="articles.length">

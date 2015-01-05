@@ -33,3 +33,12 @@
 .article-snooker {
 	background-image: url('/img/article-snooker.jpg');
 }
+
+
+.spell {
+    font-size: 24px;
+}
+
+.queryStats {
+	font-size:14px;
+}
