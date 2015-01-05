@@ -8,6 +8,7 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', 'anchorSmoothScr
     $scope.maxSize = 10;
     $scope.shouldBeOpen = true;
     $scope.querySuggestion = '';
+    $scope.quering = false;
     
     $scope.setPage = function (pageNo) {
       $scope.currentPage = pageNo;
@@ -24,6 +25,8 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', 'anchorSmoothScr
 
 	$scope.submit = function() {
 		if ($scope.query) {
+			$scope.quering = true;
+			
 			var params = {
 				query: encodeURIComponent($scope.query),
 				page: $scope.currentPage
@@ -35,7 +38,9 @@ app.controller('SolrSearchCtrl', [ '$scope', '$http', '$state', 'anchorSmoothScr
 				$scope.articles = data.queryData.articles;
 				$scope.resultCount = data.queryData.resultCount;
 				$scope.elapsedTime = data.queryData.elapsedTime;
-				$scope.querySuggestion = data.spellSuggestion.suggestionQuery;
+				$scope.querySuggestion = data.spellSuggestion.suggestionQuery;				
+			}).finally(function() {
+				$scope.quering = false;
 			});
 		}
 		
