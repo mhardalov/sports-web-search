@@ -20,7 +20,8 @@ public class SpellSuggestion {
 		SpellCheckResponse spellCheckResponse = response
 				.getSpellCheckResponse();
 
-		if (!spellCheckResponse.isCorrectlySpelled()) {
+		if (!spellCheckResponse.isCorrectlySpelled() && response.getSpellCheckResponse()
+				.getCollatedResults() != null) {
 
 			for (Collation collation : response.getSpellCheckResponse()
 					.getCollatedResults()) {
