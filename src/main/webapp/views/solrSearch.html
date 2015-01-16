@@ -40,7 +40,7 @@
 		
 		<span class="spell" ng-if="querySuggestion.length">
 			Did you mean 
-				<a href="#{{querySuggestion}}" ng-click="currectQuery()">
+				<a href="#{{querySuggestion}}" ng-click="currectQuery()" class="suggest">
 					<b>
 						<i>{{querySuggestion}}</i>
 					</b>
@@ -66,10 +66,9 @@
 				<hr>
        		</span>
        	</div>
-		<div class="navigation">
-			<pagination total-items="resultCount" ng-model="currentPage"
-				ng-change="pageChanged()" max-size="maxSize"
-				class="pagination-sm" rotate="false" num-pages="numPages"></pagination>
+       	
+       	<div class="col-lg-12 col-lg-offset-2 col-md-10 col-md-offset-1" >
+			<pagination total-items="resultCount" ng-model="$parent.currentPage" ng-change="pageChanged()" max-size="maxSize" class="pagination" rotate="false" num-pages="numPages"></pagination>
 		</div>
 	</div>
 </div>

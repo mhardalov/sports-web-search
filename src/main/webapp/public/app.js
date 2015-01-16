@@ -29,7 +29,6 @@ routerApp.directive('focusMe', function($timeout, $parse) {
     link: function(scope, element, attrs) {
       var model = $parse(attrs.focusMe);
       scope.$watch(model, function(value) {
-        console.log('value=',value);
         if(value === true) { 
           $timeout(function() {
             element[0].focus(); 
@@ -37,7 +36,6 @@ routerApp.directive('focusMe', function($timeout, $parse) {
         }
       });
       element.bind('blur', function() {
-        console.log('blur')
         scope.$apply(model.assign(scope, false));
       })
     }
@@ -97,7 +95,7 @@ routerApp.service('anchorSmoothScroll', function(){
     };
 });
 
-app.directive('a', function() {
+routerApp.directive('a.suggest', function() {
     return {
         restrict: 'E',
         link: function(scope, elem, attrs) {
