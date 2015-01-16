@@ -3,6 +3,7 @@ var app = angular.module('sportsWebSearch');
 app.controller('CategoryFinderCtrl', [ '$scope', '$http', '$state', function($scope, $http, $state) {            	
 	$scope.articles = [];
 	$scope.maxScore = 0;
+	$scope.category = '';
 	
 	$scope.submit = function() {
 		if ($scope.content) {
@@ -13,6 +14,7 @@ app.controller('CategoryFinderCtrl', [ '$scope', '$http', '$state', function($sc
 			}).success(function(data) {
 				$scope.articles = data.articles;
 				$scope.resultCount = data.maxScore;
+				$scope.category = data.category;
 			});
 		}
 		
