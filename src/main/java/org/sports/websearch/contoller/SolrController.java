@@ -11,12 +11,14 @@ import org.apache.solr.client.solrj.impl.XMLResponseParser;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
+import org.sports.ontology.model.OntologyResult;
 import org.sports.websearch.model.Article;
 import org.sports.websearch.model.ArticlesResult;
 import org.sports.websearch.model.CategoryQuery;
 import org.sports.websearch.model.ScoreResult;
 import org.sports.websearch.model.SearchQueryResult;
 import org.sports.websearch.model.SpellSuggestion;
+import org.sports.websearch.utils.OntologyConnection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -146,7 +148,7 @@ public class SolrController {
 			String queryStr = URLDecoder.decode(url.toString(), "UTF-8");
 
 			solrQuery.setQuery("url:\"" + queryStr + "\"");
-			solrQuery.set("fl", "category,content,title,url,tstamp,score");
+			solrQuery.set("fl", "category,content,title,url,tstamp,score,key");
 
 			QueryResponse rsp = this.doQuery(server, solrQuery);
 			rsp.getResults();
@@ -155,6 +157,8 @@ public class SolrController {
 			Article result = null;
 			if (docs != null && docs.getNumFound() > 0) {
 				result = new Article(docs.get(0));
+				OntologyResult ontoResult = OntologyConnection.connection.query(result.getKey());
+				result.setOntoResult(ontoResult);
 			} else {
 				return new ResponseEntity<Article>(HttpStatus.NOT_FOUND);
 			}

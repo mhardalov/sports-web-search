@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.apache.solr.common.SolrDocument;
+import org.sports.ontology.model.OntologyResult;
 import org.sports.websearch.utils.CategoryCssHelper;
 
 public class Article {
@@ -22,12 +23,17 @@ public class Article {
 	private String publishDate;
 	
 	private String cssCategory;
+	
+	private String key;
+	
+	private OntologyResult ontoResult;
 
 	public Article(SolrDocument doc) {
 		String url = doc.getFieldValue("url").toString();
 		String title = doc.getFieldValue("title").toString();
 		String content = doc.getFieldValue("content").toString();
 		String category = doc.getFieldValue("category").toString();
+		String key = doc.getFieldValue("key").toString();
 		Date date = null;
 
 		try {
@@ -44,18 +50,20 @@ public class Article {
 		this.setTitle(title);
 		this.setUrl(url);
 		this.setCategory(category);
-		this.setPublishDate(date);
+		this.setPublishDate(date);		
 		this.setCssCategory(CategoryCssHelper.getCssClass(category));
+		this.setKey(key);		
 	}
 
 	public Article(String url, String title, String content, String category,
-			Date publishDate) {
+			Date publishDate, String key) {
 		this.setContent(content);
 		this.setTitle(title);
 		this.setUrl(url);
 		this.setCategory(category);
 		this.setPublishDate(publishDate);
 		this.setCssCategory(CategoryCssHelper.getCssClass(category));
+		this.setKey(key);
 	}
 
 	public String getUrl() {
@@ -106,5 +114,21 @@ public class Article {
 
 	public void setCssCategory(String cssCategory) {
 		this.cssCategory = cssCategory;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	public OntologyResult getOntoResult() {
+		return ontoResult;
+	}
+
+	public void setOntoResult(OntologyResult ontoResult) {
+		this.ontoResult = ontoResult;
 	}
 }

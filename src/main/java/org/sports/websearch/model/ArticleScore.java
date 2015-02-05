@@ -23,8 +23,8 @@ public class ArticleScore extends Article {
 	}
 
 	public ArticleScore(String url, String title, String content,
-			String category, Date publishDate, double score) {
-		super(url, title, content, category, publishDate);
+			String category, Date publishDate, double score, String key) {
+		super(url, title, content, category, publishDate, key);
 		
 		this.setScore(score);
 	}
