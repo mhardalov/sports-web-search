@@ -24,8 +24,6 @@ public class Article {
 	
 	private String cssCategory;
 	
-	private String key;
-	
 	private OntologyResult ontoResult;
 
 	public Article(SolrDocument doc) {
@@ -33,7 +31,6 @@ public class Article {
 		String title = doc.getFieldValue("title").toString();
 		String content = doc.getFieldValue("content").toString();
 		String category = doc.getFieldValue("category").toString();
-		String key = doc.getFieldValue("key").toString();
 		Date date = null;
 
 		try {
@@ -52,18 +49,16 @@ public class Article {
 		this.setCategory(category);
 		this.setPublishDate(date);		
 		this.setCssCategory(CategoryCssHelper.getCssClass(category));
-		this.setKey(key);		
 	}
 
 	public Article(String url, String title, String content, String category,
-			Date publishDate, String key) {
+			Date publishDate) {
 		this.setContent(content);
 		this.setTitle(title);
 		this.setUrl(url);
 		this.setCategory(category);
 		this.setPublishDate(publishDate);
 		this.setCssCategory(CategoryCssHelper.getCssClass(category));
-		this.setKey(key);
 	}
 
 	public String getUrl() {
@@ -114,14 +109,6 @@ public class Article {
 
 	public void setCssCategory(String cssCategory) {
 		this.cssCategory = cssCategory;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
 	}
 
 	public OntologyResult getOntoResult() {

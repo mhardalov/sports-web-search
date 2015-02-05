@@ -77,7 +77,7 @@ public class SolrController {
 			String queryStr = URLDecoder.decode(query, "UTF-8");
 
 			solrQuery.setQuery("text:\"" + queryStr + "\"");
-			solrQuery.set("fl", "category,content,title,url,tstamp,score");
+			solrQuery.set("fl", "category,content,title,url,tstamp,score,key");
 
 			// Avoiding paging with invalid values < 1
 			solrQuery.set("start", Math.abs(Math.max(page, 1) - 1)
@@ -148,7 +148,7 @@ public class SolrController {
 			String queryStr = URLDecoder.decode(url.toString(), "UTF-8");
 
 			solrQuery.setQuery("url:\"" + queryStr + "\"");
-			solrQuery.set("fl", "category,content,title,url,tstamp,score,key");
+			solrQuery.set("fl", "category,content,title,url,tstamp,score");
 
 			QueryResponse rsp = this.doQuery(server, solrQuery);
 			rsp.getResults();
@@ -157,7 +157,7 @@ public class SolrController {
 			Article result = null;
 			if (docs != null && docs.getNumFound() > 0) {
 				result = new Article(docs.get(0));
-				OntologyResult ontoResult = OntologyConnection.connection.query(result.getKey());
+				OntologyResult ontoResult = OntologyConnection.connection.query(result.getUrl());
 				result.setOntoResult(ontoResult);
 			} else {
 				return new ResponseEntity<Article>(HttpStatus.NOT_FOUND);
