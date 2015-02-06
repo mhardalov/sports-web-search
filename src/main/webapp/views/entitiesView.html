@@ -1,0 +1,25 @@
+
+<!-- Page Header -->
+<!-- Set your background image for this header on the line below. -->
+<header class="intro-header"
+	style="background-image: url('img/entities-bg.jpg')">
+	<div class="container">
+		<div class="row">d
+			<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+				<div class="site-heading">
+					<h1>Ontology Entities</h1>					
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+<!-- Main Content -->
+<div class="container" id="container">
+    <div class="row">
+       	<div class="row" ng-repeat="item in quotes">
+			<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+				<b>{{item.person}}</b> каза <span ng-repeat="quote in item.quotes"><q><i>{{quote}}</i></q></span></div></br>
+		</div>
+	</div>
+</div>

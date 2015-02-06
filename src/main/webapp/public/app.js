@@ -16,6 +16,11 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
         	templateUrl: '/views/categoryFinder.html',
         	controller: 'CategoryFinderCtrl'
         })
+        .state('entities', {
+        	url: '/entities',
+        	templateUrl: '/views/entitiesView.html',
+        	controller: 'EntitiesCtrl'
+        })
         .state('article', {
         	url: 'article/:url',
         	templateUrl: '/views/articleView.html',

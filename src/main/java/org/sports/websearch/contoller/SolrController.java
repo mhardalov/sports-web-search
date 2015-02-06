@@ -1,6 +1,7 @@
 package org.sports.websearch.contoller;
 
 import java.net.URLDecoder;
+import java.util.Date;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -167,6 +168,24 @@ public class SolrController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<Article>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+	}
+	
+
+	@RequestMapping(value = "/entities", method = RequestMethod.GET)
+	public @ResponseBody ResponseEntity<OntologyResult> getEntities(
+			@RequestParam(value = "afterDate", required = false) Date afterDate,
+			@RequestParam(value = "beforeDate", required = false) Date beforeDate) {
+		try {
+			OntologyResult result = new OntologyResult();
+			result.setQuotes(OntologyConnection.connection.queryQuotes("", afterDate, beforeDate));
+			result.setResults(OntologyConnection.connection.queryResults("", afterDate, beforeDate));					
+			
+			return new ResponseEntity<OntologyResult>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<OntologyResult>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 	}
