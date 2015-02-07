@@ -175,12 +175,13 @@ public class SolrController {
 
 	@RequestMapping(value = "/entities", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<OntologyResult> getEntities(
+			@RequestParam(value = "entity", required = false) String entity,
 			@RequestParam(value = "afterDate", required = false) Date afterDate,
 			@RequestParam(value = "beforeDate", required = false) Date beforeDate) {
 		try {
 			OntologyResult result = new OntologyResult();
-			result.setQuotes(OntologyConnection.connection.queryQuotes("", afterDate, beforeDate));
-			result.setResults(OntologyConnection.connection.queryResults("", afterDate, beforeDate));					
+			result.setQuotes(OntologyConnection.connection.queryQuotes(entity, afterDate, beforeDate));
+			result.setResults(OntologyConnection.connection.queryResults(entity, afterDate, beforeDate));					
 			
 			return new ResponseEntity<OntologyResult>(result, HttpStatus.OK);
 		} catch (Exception e) {

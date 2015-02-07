@@ -4,6 +4,8 @@ app.controller('ArticleViewCtrl', [ '$scope', '$http', '$state',
 		'$stateParams', function($scope, $http, $state, $stateParams) {
 	$scope.article = {};
 	$scope.quotes = [];
+	$scope.results = [];
+	
 	$scope.url = $stateParams.url;
 
 	$scope.submit = function(url) {
@@ -17,6 +19,7 @@ app.controller('ArticleViewCtrl', [ '$scope', '$http', '$state',
 			}).success(function(data) {
 				$scope.article = data;
 				$scope.quotes = data.ontoResult.quotes;
+				$scope.results = data.ontoResult.results;
 			});
 		}
 	};

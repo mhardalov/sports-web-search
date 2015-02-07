@@ -16,10 +16,92 @@
 
 <!-- Main Content -->
 <div class="container" id="container">
-    <div class="row">
-       	<div class="row" ng-repeat="item in quotes">
-			<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-				<b>{{item.person}}</b> каза <span ng-repeat="quote in item.quotes"><q><i>{{quote}}</i></q></span></div></br>
+	<div class="row">
+		<div class="col-lg-12 list-inline text-center">
+			<h1 class="page-header">
+				Search <small>Ontology Entities</small>
+			</h1>
+			<form role="form" ng-submit="submit()">
+				<div class="form-group">
+					<input type="text" placeholder="Search..." class="form-control" ng-model="query.entity" name="query" focus-me="shouldBeOpen">
+				</div>				
+				<div class="form-group" >
+					<button class="btn btn-default" type="submit" ng-disabled="quering">Search</button>
+				</div>
+			</form>
 		</div>
+		<span ng-if="elapsedTime" class="queryStats"> 
+			Found <i ng-bind="resultCount"></i> results found for <i ng-bind="elapsedTime"></i> seconds
+		</span>
+		
+		<hr>
 	</div>
+	<div class="row">
+		<accordion close-others="false">
+		    <accordion-group is-open="status.isQuotesOpen">
+		        <accordion-heading>
+		            Quotes ({{quotes.length}}) <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isQuotesOpen, 'glyphicon-chevron-right': !status.isQuotesOpen}"></i>
+		        </accordion-heading>		     
+				<div class="row" >											
+					<div data-example-id="hoverable-table table-bordered table-striped">
+					   <table class="table table-hover">
+					     <thead>
+					       <tr>
+					         <th>#</th>
+					         <th>Document</th>
+					         <th>Person</th>
+					         <th>Quote</th>					         
+					       </tr>
+					     </thead>
+					     <tbody>
+					       <tr ng-repeat="item in quotes track by $index">
+					         <th scope="row">{{$index}}</th>
+					         <td>
+					         	<a ng-href="{{item.document.url}}">
+					         		{{item.document.url}}
+					         	</а>
+					         </td>
+					         <td><b>{{item.quotes.person}}</b></td>
+					         <td><span ng-repeat="quote in item.quotes.quotes track by $index"><q><i>{{quote}}</i></q></span><br></div><td>					         					         
+					       </tr>				       
+					     </tbody>
+					   </table>
+					 </div>
+				</div>	
+		    </accordion-group>
+		    <accordion-group is-open="status.isResultsOpen">
+		        <accordion-heading>
+		            Results ({{results.length}}) <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isResultsOpen, 'glyphicon-chevron-right': !status.isResultsOpen}"></i>
+		        </accordion-heading>
+		     	<div class="row" >											
+					<div data-example-id="hoverable-table table-bordered table-striped">
+					   <table class="table table-hover">
+					     <thead>
+					       <tr>
+					         <th>#</th>
+					         <th>Document</th>
+					         <th>Competitors</th>
+					         <th>Result</th>
+					         <th>Location</th>
+					       </tr>
+					     </thead>
+					     <tbody>
+					       <tr ng-repeat="item in results track by $index">
+					         <th scope="row">{{$index}}</th>
+					         <td>
+					         	<a ng-href="{{item.document.url}}">
+					         		{{item.document.url}}
+					         	</а>
+					         </td>
+					         <td><span ng-repeat="competitor in item.results.competitors track by $index"><i>{{competitor}}</i><br></span><td>
+					         <td><b>{{item.results.result}}</b></td>
+					         <td>{{item.results.location}}</td>
+					       </tr>				       
+					     </tbody>
+					   </table>
+					 </div>
+				</div>
+		    </accordion-group>
+		</accordion>       	
+	</div>	
 </div>
