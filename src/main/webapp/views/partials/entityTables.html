@@ -1,0 +1,66 @@
+<accordion close-others="false">
+    <accordion-group is-open="status.isQuotesOpen">
+        <accordion-heading>
+            Quotes ({{quotes.length}}) <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isQuotesOpen, 'glyphicon-chevron-right': !status.isQuotesOpen}"></i>
+        </accordion-heading>		     
+		<div class="row" >											
+			<div data-example-id="hoverable-table table-bordered table-striped">
+			   <table class="table table-hover">
+			     <thead>
+			       <tr>
+			         <th>#</th>
+			         <th>Document</th>
+			         <th>Person</th>
+			         <th>Quote</th>
+			       </tr>
+			     </thead>
+			     <tbody>
+			       <tr ng-repeat="item in quotes track by $index">
+			         <th scope="row">{{$index}}</th>
+			         <td>
+			         	<a ng-href="{{item.document.url}}">
+			         		{{item.document.url}}
+			         	</а>
+			         </td>
+			         <td><b>{{item.quotes.person}}</b></td>
+			         <td><span ng-repeat="quote in item.quotes.quotes track by $index"><q><i>{{quote.quote}}</i></q>{{quote.sentiment}}</span><br></div><td>					         					         
+			       </tr>				       
+			     </tbody>
+			   </table>
+			 </div>
+		</div>	
+    </accordion-group>
+    <accordion-group is-open="status.isResultsOpen">
+        <accordion-heading>
+            Results ({{results.length}}) <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isResultsOpen, 'glyphicon-chevron-right': !status.isResultsOpen}"></i>
+        </accordion-heading>
+     	<div class="row" >											
+			<div data-example-id="hoverable-table table-bordered table-striped">
+			   <table class="table table-hover">
+			     <thead>
+			       <tr>
+			         <th>#</th>
+			         <th>Document</th>
+			         <th>Competitors</th>
+			         <th>Result</th>
+			         <th>Location</th>
+			       </tr>
+			     </thead>
+			     <tbody>
+			       <tr ng-repeat="item in results track by $index">
+			         <th scope="row">{{$index}}</th>
+			         <td>
+			         	<a ng-href="{{item.document.url}}">
+			         		{{item.document.url}}
+			         	</а>
+			         </td>
+			         <td><span ng-repeat="competitor in item.results.competitors track by $index"><i>{{competitor}}</i><br></span><td>
+			         <td><b>{{item.results.result}}</b></td>
+			         <td>{{item.results.location}}</td>
+			       </tr>				       
+			     </tbody>
+			   </table>
+			 </div>
+		</div>
+    </accordion-group>
+</accordion>
